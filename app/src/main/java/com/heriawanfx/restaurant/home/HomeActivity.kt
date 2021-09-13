@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import androidx.recyclerview.widget.GridLayoutManager
 import com.heriawanfx.restaurant.R
 import com.heriawanfx.restaurant.core.data.Resource
 import com.heriawanfx.restaurant.core.domain.model.Restaurant
@@ -37,6 +36,8 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
 
     private fun initViews(){
         val listAdapter = RestaurantListAdapter(this)
+        binding.rvRestaurant.adapter = listAdapter
+
         viewModel.restaurants.observe(this, { resource ->
             if(resource != null){
                 when(resource){
@@ -48,24 +49,24 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
                         val data = resource.data
                         if(data.isNullOrEmpty()){
                             binding.viewEmpty.root.visibility = View.VISIBLE
+                            if(viewModel.getQuery().value?.isNotEmpty() == true){
+                                binding.viewEmpty.txtEmpty.text = getString(R.string.search_not_found)
+                            }
+                        } else {
+                            binding.viewEmpty.root.visibility = View.GONE
                         }
 
                         listAdapter.submitList(resource.data)
                     }
                     is Resource.Error -> {
                         binding.progressBar.visibility = View.GONE
+                        binding.rvRestaurant.visibility = View.GONE
                         binding.viewError.root.visibility = View.VISIBLE
                         binding.viewError.txtError.text = resource.message ?: getString(R.string.error_text)
                     }
                 }
             }
         })
-
-        with(binding.rvRestaurant) {
-            layoutManager = GridLayoutManager(context, 2)
-            setHasFixedSize(true)
-            adapter = listAdapter
-        }
 
     }
 

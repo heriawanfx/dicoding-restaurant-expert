@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.heriawanfx.restaurant.core.R
 import com.heriawanfx.restaurant.core.databinding.ItemGridRestaurantBinding
 import com.heriawanfx.restaurant.core.domain.model.Restaurant
 
@@ -30,6 +31,8 @@ class RestaurantListAdapter(private val listener: Listener) : ListAdapter<Restau
                 txtSubtitle.text = restaurant.description
                 Glide.with(imgPicture.context)
                     .load(restaurant.getPictureUrl())
+                    .placeholder(R.drawable.bg_placeholder)
+                    .error(R.drawable.bg_error)
                     .into(imgPicture)
                 root.setOnClickListener {
                     listener.onItemClick(restaurant)

@@ -3,6 +3,7 @@ package com.heriawanfx.restaurant.core.data.source.remote.network
 import com.heriawanfx.restaurant.core.data.source.remote.response.BaseDetailResponse
 import com.heriawanfx.restaurant.core.data.source.remote.response.BaseListResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -10,8 +11,8 @@ interface ApiService {
     suspend fun getList(): BaseListResponse
 
     @GET("detail/{id}")
-    suspend fun getDetail(@Query("id") id: String): BaseDetailResponse
+    suspend fun getDetail(@Path("id") id: String): BaseDetailResponse
 
-    @GET("search?q={query}")
-    suspend fun search(@Query("query") query: String?): BaseListResponse
+    @GET("search")
+    suspend fun search(@Query("q") query: String?): BaseListResponse
 }

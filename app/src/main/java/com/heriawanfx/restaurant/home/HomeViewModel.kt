@@ -7,6 +7,7 @@ import com.heriawanfx.restaurant.core.domain.usecase.RestaurantUseCase
 
 class HomeViewModel(private val restaurantUseCase: RestaurantUseCase) : ViewModel() {
     private val _query = MutableLiveData("")
+    fun getQuery() : LiveData<String> = _query
     fun setQuery(value: String) {
         _query.value = value
     }
