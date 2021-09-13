@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">DicodingRestaurant</string>
+    <string name="app_name">Dicoding Restaurant</string>
     <string name="title_feature_favorite">Favorite Module</string>
     <string name="empty_text">Tidak ada data</string>
     <string name="error_text">Ada masalah</string>
-    <string name="search_hint">Cari Restaurant...</string>
+    <string name="search_hint">Cari Restaurant…</string>
     <string name="search_not_found">Restoran tidak ditemukan</string>
 </resources>

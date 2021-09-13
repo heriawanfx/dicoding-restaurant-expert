@@ -1,32 +1,31 @@
-package com.heriawanfx.restaurant.home
+package com.heriawanfx.restaurant.detail
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
+import com.bumptech.glide.Glide
 import com.heriawanfx.restaurant.R
 import com.heriawanfx.restaurant.core.data.Resource
 import com.heriawanfx.restaurant.core.domain.model.Restaurant
-import com.heriawanfx.restaurant.core.ui.RestaurantListAdapter
-import com.heriawanfx.restaurant.databinding.ActivityHomeBinding
-import com.heriawanfx.restaurant.detail.DetailActivity
+import com.heriawanfx.restaurant.databinding.ActivityDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
+class DetailActivity : AppCompatActivity(){
 
-    private var _binding: ActivityHomeBinding? = null
+    private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by viewModel()
+    private val viewModel: DetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = ActivityHomeBinding.inflate(layoutInflater)
+        _binding = ActivityDetailBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
+        parseIntent()
         initViews()
         initListeners()
     }
@@ -36,11 +35,18 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
         _binding = null
     }
 
-    private fun initViews(){
-        val listAdapter = RestaurantListAdapter(this)
-        binding.rvRestaurant.adapter = listAdapter
+    private fun parseIntent(){
+        val id = intent.getStringExtra("EXTRA_ID")
+        if(id != null){
+            viewModel.setRestaurantId(id)
+        }
+    }
 
-        viewModel.restaurants.observe(this, { resource ->
+    private fun initViews(){
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        viewModel.restaurantDetail.observe(this, { resource ->
             if(resource != null){
                 when(resource){
                     is Resource.Loading -> {
@@ -49,20 +55,17 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
                     is Resource.Success -> {
                         binding.progressBar.visibility = View.GONE
                         val data = resource.data
-                        if(data.isNullOrEmpty()){
+                        if(data == null){
                             binding.viewEmpty.root.visibility = View.VISIBLE
-                            if(viewModel.getQuery().value?.isNotEmpty() == true){
-                                binding.viewEmpty.txtEmpty.text = getString(R.string.search_not_found)
-                            }
                         } else {
                             binding.viewEmpty.root.visibility = View.GONE
+                            binding.groupContent.visibility = View.VISIBLE
+                            generateContent(data)
                         }
 
-                        listAdapter.submitList(resource.data)
                     }
                     is Resource.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        binding.rvRestaurant.visibility = View.GONE
                         binding.viewError.root.visibility = View.VISIBLE
                         binding.viewError.txtError.text = resource.message ?: getString(R.string.error_text)
                     }
@@ -72,16 +75,27 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
 
     }
 
-    private fun initListeners(){
-        binding.edtSearch.doAfterTextChanged { editable ->
-            val value = editable?.toString() ?: ""
-            viewModel.setQuery(value)
+    private fun generateContent(data: Restaurant){
+        with(binding){
+            Glide.with(this@DetailActivity)
+                .load(data.getPictureUrl())
+                .placeholder(R.drawable.bg_placeholder)
+                .error(R.drawable.bg_error)
+                .into(imgPicture)
+
+            txtName.text = data.name
+            txtDescription.text = data.description
         }
     }
 
-    override fun onItemClick(item: Restaurant) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra("EXTRA_ID", item.id)
-        startActivity(intent)
+    private fun initListeners(){
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return true
+    }
+
 }
