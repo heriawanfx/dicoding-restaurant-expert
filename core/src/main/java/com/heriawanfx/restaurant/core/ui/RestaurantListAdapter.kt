@@ -19,9 +19,7 @@ class RestaurantListAdapter(private val listener: Listener) : ListAdapter<Restau
 
     override fun onBindViewHolder(holder: RestaurantGridViewHolder, position: Int) {
         val item = getItem(position)
-        if(item != null){
-            holder.bind(item)
-        }
+        holder.bind(item)
     }
 
     inner class RestaurantGridViewHolder(private val binding: ItemGridRestaurantBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -44,11 +42,13 @@ class RestaurantListAdapter(private val listener: Listener) : ListAdapter<Restau
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Restaurant>() {
             override fun areItemsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
-                return oldItem.id == newItem.id
+                val sameId = oldItem.id == newItem.id
+                return sameId
             }
 
             override fun areContentsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
-                return oldItem == newItem
+                val sameObject = oldItem == newItem
+                return sameObject
             }
 
         }

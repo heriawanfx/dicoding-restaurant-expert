@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RestaurantDao {
 
-    @Query("SELECT * FROM tbl_restaurant WHERE name LIKE '%'|| :query || '%' ")
+    @Query("SELECT * FROM tbl_restaurant WHERE name LIKE '%'|| :query || '%' ORDER BY id")
     fun readAllRestaurants(query: String? = null): Flow<List<RestaurantEntity>>
 
     @Query("SELECT * FROM tbl_restaurant where id = :id")
