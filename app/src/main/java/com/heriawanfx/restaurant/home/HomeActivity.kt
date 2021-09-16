@@ -2,9 +2,13 @@ package com.heriawanfx.restaurant.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import com.heriawanfx.restaurant.BuildConfig
 import com.heriawanfx.restaurant.R
 import com.heriawanfx.restaurant.core.data.Resource
 import com.heriawanfx.restaurant.core.domain.model.Restaurant
@@ -83,6 +87,27 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("EXTRA_ID", item.id)
         startActivity(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.menu_favorite){
+            intentToFavorite()
+        }
+        return true
+    }
+
+    private fun intentToFavorite(){
+        try {
+            val intent = Intent(this, Class.forName("${BuildConfig.APPLICATION_ID}.feature_favorite.FavoriteActivity"))
+            startActivity(intent)
+        } catch (e: Exception){
+            Toast.makeText(this, "Modul favorit tidak tersedia", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onBackPressed() {
