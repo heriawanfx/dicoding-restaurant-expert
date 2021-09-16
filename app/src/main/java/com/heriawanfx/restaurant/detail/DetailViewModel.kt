@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.heriawanfx.restaurant.core.domain.model.Restaurant
 import com.heriawanfx.restaurant.core.domain.usecase.RestaurantUseCase
 
 class DetailViewModel(private val restaurantUseCase: RestaurantUseCase): ViewModel() {
@@ -14,5 +15,9 @@ class DetailViewModel(private val restaurantUseCase: RestaurantUseCase): ViewMod
 
     val restaurantDetail = Transformations.switchMap(_restaurantId){
         restaurantUseCase.getRestaurantDetail(it).asLiveData()
+    }
+
+    fun toggleFavorite(item: Restaurant){
+        restaurantUseCase.setFavoriteRestaurant(item)
     }
 }

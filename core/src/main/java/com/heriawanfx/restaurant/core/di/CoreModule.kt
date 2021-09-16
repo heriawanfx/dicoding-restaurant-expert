@@ -7,6 +7,7 @@ import com.heriawanfx.restaurant.core.data.source.local.room.RestaurantDatabase
 import com.heriawanfx.restaurant.core.data.source.remote.RemoteDataSource
 import com.heriawanfx.restaurant.core.data.source.remote.network.ApiService
 import com.heriawanfx.restaurant.core.domain.repository.IRestaurantRepository
+import com.heriawanfx.restaurant.core.utils.AppExecutors
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -46,5 +47,6 @@ val networkModule = module {
 val repositoryModule = module {
     single { LocalDataSource(get()) }
     single { RemoteDataSource(get()) }
-    single<IRestaurantRepository> { RestaurantRepository(get(), get()) }
+    factory { AppExecutors() }
+    single<IRestaurantRepository> { RestaurantRepository(get(), get(), get()) }
 }

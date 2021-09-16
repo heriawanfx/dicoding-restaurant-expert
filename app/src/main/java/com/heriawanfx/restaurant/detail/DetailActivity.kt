@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.heriawanfx.restaurant.R
 import com.heriawanfx.restaurant.core.data.Resource
@@ -27,7 +28,6 @@ class DetailActivity : AppCompatActivity(){
 
         parseIntent()
         initViews()
-        initListeners()
     }
 
     override fun onDestroy() {
@@ -54,13 +54,19 @@ class DetailActivity : AppCompatActivity(){
                     }
                     is Resource.Success -> {
                         binding.progressBar.visibility = View.GONE
-                        val data = resource.data
-                        if(data == null){
+                        val item = resource.data
+                        if(item == null){
                             binding.viewEmpty.root.visibility = View.VISIBLE
                         } else {
                             binding.viewEmpty.root.visibility = View.GONE
                             binding.groupContent.visibility = View.VISIBLE
-                            generateContent(data)
+
+                            binding.fabFavorite.setOnClickListener {
+                                viewModel.toggleFavorite(item)
+                                generateFavorite(item)
+                            }
+
+                            generateContent(item)
                         }
 
                     }
@@ -75,20 +81,28 @@ class DetailActivity : AppCompatActivity(){
 
     }
 
-    private fun generateContent(data: Restaurant){
+    private fun generateContent(restaurant: Restaurant){
         with(binding){
             Glide.with(this@DetailActivity)
-                .load(data.getPictureUrl())
+                .load(restaurant.getPictureUrl())
                 .placeholder(R.drawable.bg_placeholder)
                 .error(R.drawable.bg_error)
                 .into(imgPicture)
 
-            txtName.text = data.name
-            txtDescription.text = data.description
+            txtName.text = restaurant.name
+            txtDescription.text = restaurant.description
+
+            generateFavorite(restaurant)
+
         }
     }
 
-    private fun initListeners(){
+    private fun generateFavorite(restaurant: Restaurant){
+        if(restaurant.isFavorite){
+            binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_favorite))
+        } else {
+            binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_favorite_outline))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

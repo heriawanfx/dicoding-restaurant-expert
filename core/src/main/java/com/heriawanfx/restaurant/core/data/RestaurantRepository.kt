@@ -6,10 +6,11 @@ import com.heriawanfx.restaurant.core.data.source.remote.network.ApiResponse
 import com.heriawanfx.restaurant.core.data.source.remote.response.RestaurantResponse
 import com.heriawanfx.restaurant.core.domain.model.Restaurant
 import com.heriawanfx.restaurant.core.domain.repository.IRestaurantRepository
+import com.heriawanfx.restaurant.core.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class RestaurantRepository(private val localDataSource: LocalDataSource, private val remoteDataSource: RemoteDataSource): IRestaurantRepository {
+class RestaurantRepository(private val localDataSource: LocalDataSource, private val remoteDataSource: RemoteDataSource, private val appExecutors: AppExecutors): IRestaurantRepository {
     override fun getAllRestaurants(query: String?): Flow<Resource<List<Restaurant>>> {
         return object : NetworkBoundResource<List<Restaurant>, List<RestaurantResponse>>() {
             override fun loadFromDB(): Flow<List<Restaurant>> {
@@ -43,7 +44,7 @@ class RestaurantRepository(private val localDataSource: LocalDataSource, private
             }
 
             override fun shouldFetch(data: Restaurant?): Boolean {
-                return true
+                return data == null
             }
 
             override suspend fun createCall(): Flow<ApiResponse<RestaurantResponse>> {
@@ -65,7 +66,10 @@ class RestaurantRepository(private val localDataSource: LocalDataSource, private
     }
 
     override fun setFavoriteRestaurant(restaurant: Restaurant) {
-        val entity = restaurant.asEntity()
-        localDataSource.updateRestaurant(entity)
+        appExecutors.diskIO().execute {
+            val entity = restaurant.asEntity()
+            localDataSource.updateRestaurant(entity)
+        }
+
     }
 }

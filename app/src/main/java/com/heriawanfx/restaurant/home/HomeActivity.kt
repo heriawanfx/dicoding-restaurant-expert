@@ -84,4 +84,13 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
         intent.putExtra("EXTRA_ID", item.id)
         startActivity(intent)
     }
+
+    override fun onBackPressed() {
+        if(binding.edtSearch.text?.isNotEmpty() == true){
+            binding.edtSearch.setText("")
+            return
+        }
+
+        super.onBackPressed()
+    }
 }
