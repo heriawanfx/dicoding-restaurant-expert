@@ -6,5 +6,8 @@
     <string name="search_hint">Cari Restaurant…</string>
     <string name="search_not_found">Restoran tidak ditemukan</string>
     <string name="make_favorite">Jadikan favorit</string>
-    <string name="title_favorite">Daftar Favorit</string>
+    <string name="title_favorite">Favorit</string>
+    <string name="title_daftar_favorit">Daftar Favorit</string>
+    <string name="title_home">Beranda</string>
+    <string name="title_detail">Detail</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.heriawanfx.restaurant.R
 import com.heriawanfx.restaurant.core.domain.model.Restaurant
 import com.heriawanfx.restaurant.core.ui.RestaurantListAdapter
 import com.heriawanfx.restaurant.detail.DetailActivity
@@ -39,10 +40,15 @@ class FavoriteActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
 
     private fun initViews(){
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            subtitle = resources.getString(R.string.title_daftar_favorit)
+        }
 
         val listAdapter = RestaurantListAdapter(this)
-        binding.rvRestaurant.adapter = listAdapter
+        binding.rvRestaurant.apply {
+            adapter = listAdapter
+        }
 
 
         binding.progressBar.visibility = View.VISIBLE

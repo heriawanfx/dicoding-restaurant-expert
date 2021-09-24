@@ -1,6 +1,7 @@
 package com.heriawanfx.restaurant.home
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,7 +9,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import com.heriawanfx.restaurant.BuildConfig
 import com.heriawanfx.restaurant.R
 import com.heriawanfx.restaurant.core.data.Resource
 import com.heriawanfx.restaurant.core.domain.model.Restaurant
@@ -41,8 +41,12 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
     }
 
     private fun initViews(){
+        supportActionBar?.subtitle = resources.getString(R.string.title_home)
+
         val listAdapter = RestaurantListAdapter(this)
-        binding.rvRestaurant.adapter = listAdapter
+        binding.rvRestaurant.apply {
+            adapter = listAdapter
+        }
 
         viewModel.restaurants.observe(this, { resource ->
             if(resource != null){
@@ -103,7 +107,8 @@ class HomeActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
 
     private fun intentToFavorite(){
         try {
-            val intent = Intent(this, Class.forName("${BuildConfig.APPLICATION_ID}.feature_favorite.FavoriteActivity"))
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("restaurantapp://favorite")
             startActivity(intent)
         } catch (e: Exception){
             Toast.makeText(this, "Modul favorit tidak tersedia", Toast.LENGTH_SHORT).show()

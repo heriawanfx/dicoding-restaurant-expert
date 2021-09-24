@@ -3,6 +3,7 @@ package com.heriawanfx.restaurant.detail
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -44,7 +45,10 @@ class DetailActivity : AppCompatActivity(){
 
     private fun initViews(){
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            subtitle = resources.getString(R.string.title_detail)
+        }
 
         viewModel.restaurantDetail.observe(this, { resource ->
             if(resource != null){
@@ -63,6 +67,13 @@ class DetailActivity : AppCompatActivity(){
 
                             binding.fabFavorite.setOnClickListener {
                                 viewModel.toggleFavorite(item)
+
+                                if(!item.isFavorite){
+                                    Toast.makeText(this, "Berhasil ditambah ke daftar favorit", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(this, "Restoran ini telah dihapus dari daftar favorit", Toast.LENGTH_SHORT).show()
+                                }
+
                                 generateFavorite(item)
                             }
 
