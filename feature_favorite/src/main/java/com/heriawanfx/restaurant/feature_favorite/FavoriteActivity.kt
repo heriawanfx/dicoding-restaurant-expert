@@ -57,10 +57,10 @@ class FavoriteActivity : AppCompatActivity(), RestaurantListAdapter.Listener {
 
             if(result.isNullOrEmpty()){
                 binding.txtEmpty.visibility = View.VISIBLE
-                return@observe
+            } else {
+                binding.txtEmpty.visibility = View.GONE
             }
 
-            binding.txtEmpty.visibility = View.GONE
 
             listAdapter.submitList(result)
 

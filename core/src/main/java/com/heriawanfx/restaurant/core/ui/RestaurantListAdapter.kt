@@ -42,13 +42,11 @@ class RestaurantListAdapter(private val listener: Listener) : ListAdapter<Restau
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Restaurant>() {
             override fun areItemsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
-                val sameId = oldItem.id == newItem.id
-                return sameId
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
-                val sameObject = oldItem == newItem
-                return sameObject
+                return oldItem == newItem
             }
 
         }
