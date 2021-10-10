@@ -2,7 +2,6 @@ package com.heriawanfx.restaurant.core.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName
 import com.heriawanfx.restaurant.core.data.source.local.entity.RestaurantEntity
-import com.heriawanfx.restaurant.core.domain.model.Restaurant
 
 data class RestaurantResponse(
 
@@ -49,21 +48,6 @@ data class RestaurantResponse(
         )
     }
 
-    fun asDomain(): Restaurant {
-        return Restaurant(
-            id = id,
-            name = name,
-            address = address,
-            pictureId = pictureId,
-            city = city,
-            rating = rating,
-            description = description,
-            menus = menus,
-            categories = categories,
-            customerReviews = customerReviews,
-        )
-
-    }
 }
 
 

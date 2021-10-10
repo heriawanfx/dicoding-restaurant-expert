@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:dist="http://schemas.android.com/apk/distribution"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.heriawanfx.restaurant.feature_favorite">
 
     <dist:module
@@ -12,13 +12,14 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application>
+    <application android:allowBackup="true">
         <activity android:name=".FavoriteActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="restaurantapp"
-                    android:host="favorite"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="favorite"
+                    android:scheme="restaurantapp" />
             </intent-filter>
         </activity>
     </application>
